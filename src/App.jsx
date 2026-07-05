@@ -1,81 +1,75 @@
-/* eslint-disable react/no-unknown-property */
-import { Suspense, useLayoutEffect, useRef } from "react";
-import { Canvas } from "@react-three/fiber";
-import { Bounds, Center, Environment, useGLTF } from "@react-three/drei";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Suspense, useEffect, useRef, useState } from "react";
+import Crosshair from "./components/Crosshair";
+import Scene from "./components/Scene";
+import TrueFocus from "./components/TrueFocus";
 import "./App.css";
 
-gsap.registerPlugin(ScrollTrigger);
+const chapters = [
+  "Apresentacao",
+  "Estrutura",
+  "Acabamento",
+  "Detalhes",
+];
 
-const MODEL_PATH = "/Meshy_AI_Crimson_Cogwork_Rifle_0629221108_texture.glb";
+function ChapterProgress() {
+  const [activeChapter, setActiveChapter] = useState(0);
 
-function RifleModel() {
-  const groupRef = useRef(null);
-  const { scene } = useGLTF(MODEL_PATH);
+  useEffect(() => {
+    let frameId = 0;
 
-  useLayoutEffect(() => {
-    const group = groupRef.current;
+    const updateChapter = () => {
+      const scrollableHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const progress =
+        scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0;
+      const nextChapter = Math.min(
+        chapters.length - 1,
+        Math.round(progress * (chapters.length - 1)),
+      );
 
-    if (!group) {
-      return undefined;
-    }
+      setActiveChapter(nextChapter);
+    };
 
-    const context = gsap.context(() => {
-      const timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".scroll-scenes",
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 1.2,
-        },
-      });
+    const handleScroll = () => {
+      cancelAnimationFrame(frameId);
+      frameId = requestAnimationFrame(updateChapter);
+    };
 
-      timeline
-        .set(group.position, { x: 0, y: -0.25, z: 0 })
-        .set(group.rotation, { x: 0.12, y: -0.45, z: 0.08 })
-        .to(group.position, { x: -1.7, y: 0.05, z: 0.15, ease: "none" })
-        .to(group.rotation, { x: 0.55, y: Math.PI * 1.25, z: -0.12, ease: "none" }, "<")
-        .to(group.position, { x: 1.6, y: -0.12, z: -0.1, ease: "none" })
-        .to(group.rotation, { x: -0.18, y: Math.PI * 2.2, z: 0.22, ease: "none" }, "<")
-        .to(group.position, { x: -0.35, y: 0.18, z: 0.25, ease: "none" })
-        .to(group.rotation, { x: 0.22, y: Math.PI * 3.25, z: -0.1, ease: "none" }, "<");
-    });
+    updateChapter();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
 
-    return () => context.revert();
+    return () => {
+      cancelAnimationFrame(frameId);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
   }, []);
 
   return (
-    <group ref={groupRef}>
-      <Center>
-        <primitive object={scene} scale={1.35} />
-      </Center>
-    </group>
-  );
-}
-
-function Scene() {
-  return (
-    <div className="model-stage" aria-hidden="true">
-      <Canvas camera={{ position: [0, 0.25, 5.3], fov: 38 }} dpr={[1, 2]}>
-        <color attach="background" args={["#151515"]} />
-        <ambientLight intensity={1.8} />
-        <directionalLight position={[4, 5, 5]} intensity={3.5} />
-        <directionalLight position={[-4, -2, 3]} intensity={1.8} color="#ff7050" />
-        <Suspense fallback={null}>
-          <Bounds fit clip observe margin={1.15}>
-            <RifleModel />
-          </Bounds>
-          <Environment preset="city" />
-        </Suspense>
-      </Canvas>
-    </div>
+    <nav className="chapter-progress" aria-label="Progresso dos capitulos">
+      <div className="chapter-track" aria-hidden="true" />
+      {chapters.map((chapter, index) => (
+        <a
+          className={`chapter-dot ${index === activeChapter ? "is-active" : ""}`}
+          href={`#chapter-${index + 1}`}
+          key={chapter}
+          aria-label={`Ir para ${chapter}`}
+          aria-current={index === activeChapter ? "step" : undefined}
+        >
+          <span className="chapter-dot-marker" />
+          <span className="chapter-dot-label">{chapter}</span>
+        </a>
+      ))}
+    </nav>
   );
 }
 
 function App() {
+  const scrollScenesRef = useRef(null);
+
   return (
-    <main className="scroll-scenes overflow-x-hidden">
+    <main className="scroll-scenes overflow-x-hidden" ref={scrollScenesRef}>
       <Suspense
         fallback={
           <div className="fixed inset-0 z-50 grid place-items-center bg-black text-white">
@@ -84,42 +78,78 @@ function App() {
         }
       >
         <Scene />
+        <Crosshair
+          color="#ff705050"
+          containerRef={scrollScenesRef}
+        />
+        <ChapterProgress />
 
-        <section className="panel hero-panel relative grid min-h-screen place-items-center">
-          <p className="hero-title top-title">Crimson Cogwork</p>
-          <p className="hero-title bottom-title">Rifle</p>
+        <section
+          className="panel hero-panel relative grid min-h-screen place-items-center"
+          id="chapter-1"
+        >
+          <div className="hero-title top-title hero-focus">
+            <TrueFocus
+              sentence="Concept Rifle"
+              blurAmount={4}
+              borderColor="#ff7050"
+              glowColor="rgba(255, 112, 80, 0.62)"
+              animationDuration={0.65}
+              pauseBetweenAnimations={0.9}
+            />
+          </div>
+          {/* <p className="hero-title bottom-title">Concept Rifle</p> */}
         </section>
 
-        <section className="panel relative flex min-h-screen items-center justify-evenly">
+        <section
+          className="panel relative flex min-h-screen items-center justify-evenly"
+          id="chapter-2"
+        >
           <p className="w-[50%] border-0 border-red-700"></p>
-
-          <p className="panel-copy text-white w-[50%] text-center px-4 text-4xl font-semibold">
-            A cada scroll, o modelo muda de posicao e revela outro angulo da
-            estrutura mecanica.
-          </p>
+          <div className="section-content">
+            <span className="eyebrow">Capítulo 01</span>
+            <p className="panel-copy text-white pr-28 text-xl !font-thin">
+              Um rifle conceitual de oficina, construido em camadas de metal
+              escurecido, cobre gasto e pecas aparentes que sugerem montagem
+              manual.
+            </p>
+          </div>
         </section>
 
-        <section className="panel relative flex min-h-screen items-center justify-evenly">
-          <p className="panel-copy text-white order-1 w-[50%] text-center px-4 text-4xl font-semibold">
-            A rotacao acompanha o progresso da pagina para criar uma transicao
-            fluida entre as cenas.
-          </p>
+        <section
+          className="panel relative flex min-h-screen items-center justify-evenly"
+          id="chapter-3"
+        >
+          <div className="section-content !items-start">
+            <span className="eyebrow">Capítulo 02</span>
+            <p className="panel-copy text-white order-1 w-[50%] text-center pr-28 text-xl !font-thin">
+              A silhueta alongada destaca o cano, a coronha e o corpo mecanico,
+              enquanto os detalhes vermelhos dao ao modelo uma identidade
+              industrial mais agressiva.
+            </p>
+          </div>
           <p className="w-[50%] order-2"></p>
         </section>
 
-        <section className="panel relative flex min-h-screen items-center justify-evenly">
-          <p className="w-[50%] border-0 border-red-700"></p>
-
-          <p className="panel-copy text-white w-[50%] text-center px-4 text-4xl font-semibold">
-            O canvas fica fixo no fundo enquanto o conteudo guia o movimento do
-            objeto em 3D.
+        <section
+          className="panel relative flex min-h-screen items-center justify-evenly"
+          id="chapter-4"
+        >
+          <p className="w-[50%] border-0 border-red-700">
           </p>
+          <div className="section-content">
+            <span className="eyebrow">Capítulo 03</span>
+
+            <p className="panel-copy text-white pr-28 text-lg !font-thin">
+              Feito para close-ups em tempo real, o asset combina materiais
+              envelhecidos, volumes robustos e leitura clara de perfil em uma cena
+              3D interativa.
+            </p>
+          </div>
         </section>
       </Suspense>
     </main>
   );
 }
-
-useGLTF.preload(MODEL_PATH);
 
 export default App;
