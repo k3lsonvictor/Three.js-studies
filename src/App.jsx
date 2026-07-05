@@ -257,7 +257,15 @@ function App() {
       >
         <p className="w-[50%] border-0 border-red-700"></p>
         <div className="section-content">
-          <span className="eyebrow">Capítulo 01</span>
+          {/* <span className="eyebrow">Capítulo 01</span> */}
+          <span className="eyebrow mb-3 !text-sm uppercase tracking-[.45em] text-red-500">
+            Capítulo 01
+          </span>
+          <h2 className="eyebrow w-[100%] text-start mb-5 text-6xl font-black uppercase tracking-wide !text-white">
+            Engrenagem
+            <br />
+            Rubra
+          </h2>
           <p className="panel-copy text-white pr-28 text-xl !font-thin">
             Um rifle conceitual de oficina, construido em camadas de metal
             escurecido, cobre gasto e pecas aparentes que sugerem montagem
@@ -272,7 +280,14 @@ function App() {
         ref={chapter3Ref}
       >
         <div className="section-content !items-start">
-          <span className="eyebrow">Capítulo 02</span>
+          <span className="mb-3 text-sm uppercase tracking-[.45em] text-red-500">
+            Capítulo 02
+          </span>
+          <h2 className="mb-5 text-6xl font-black uppercase tracking-wide text-white">
+            Engrenagem
+            <br />
+            Rubra
+          </h2>
           <p className="panel-copy text-white !w-[40%] text-center pr-28 text-xl !font-semibold">
             A silhueta alongada destaca o cano, a coronha e o corpo mecanico,
             enquanto os detalhes vermelhos dao ao modelo uma identidade
@@ -301,16 +316,21 @@ function App() {
       </section>
 
       <section
-        className="panel chapter-four-panel relative flex min-h-screen items-center justify-evenly"
+        className="panel chapter-four-panel relative flex min-h-screen items-center overflow-hidden px-24"
         id="chapter-4"
       >
         <img
-          className="chapter-four-background"
+          className="chapter-four-background absolute inset-0 h-full w-full object-cover"
           src="/background-batle.jpg"
           alt=""
           aria-hidden="true"
         />
-        <div className="chapter-four-background-tint" aria-hidden="true" />
+
+        <div className="chapter-four-background-tint absolute inset-0 bg-black/75" />
+
+        {/* Glow atrás da arma */}
+        <div className="absolute left-[24%] top-1/2 h-[650px] w-[650px] -translate-y-1/2 rounded-full bg-red-600/10 blur-[180px]" />
+
         <GradualBlur
           className="chapter-four-transition-blur"
           position="center"
@@ -323,16 +343,122 @@ function App() {
           target="parent"
           zIndex={1}
         />
-        <p className="w-[50%] border-0 border-red-700">
-        </p>
-        <div className="section-content">
-          <span className="eyebrow">Capítulo 03</span>
 
-          <p className="panel-copy text-white pr-28 text-lg !font-thin">
-            Feito para close-ups em tempo real, o asset combina materiais
-            envelhecidos, volumes robustos e leitura clara de perfil em uma cena
-            3D interativa.
+        {/* ARMA */}
+        <div className="relative z-20 flex w-1/2 items-center justify-center">
+          {/* <img
+            src="/weapon.png"
+            alt="Engrenagem Rubra"
+            className="w-[95%] drop-shadow-[0_60px_50px_rgba(0,0,0,.8)] transition duration-500 hover:scale-105"
+          /> */}
+        </div>
+
+        {/* TEXTO */}
+        <div className="relative z-20 flex w-[480px] flex-col">
+
+          {/* Número enorme */}
+          <span className="absolute -top-28 right-0 text-[220px] font-black leading-none text-white/[0.03]">
+            03
+          </span>
+
+          <span className="mb-3 text-sm uppercase tracking-[.45em] text-red-500">
+            Capítulo 03
+          </span>
+
+          <h2 className="mb-5 text-6xl font-black uppercase tracking-wide text-white">
+            Engrenagem
+            <br />
+            Rubra
+          </h2>
+
+          <p className="mb-10 text-lg font-light leading-8 text-zinc-300">
+            Desenvolvida para cenas cinematográficas em tempo real, a
+            <span className="text-red-400"> Engrenagem Rubra </span>
+            combina aço envelhecido, mecanismos aparentes e iluminação emissiva,
+            criando uma estética industrial inspirada no steampunk.
           </p>
+
+          {/* Card */}
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+
+            <div className="mb-6 flex items-center justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[.25em] text-zinc-500">
+                  Raridade
+                </p>
+
+                <p className="mt-1 text-xl font-bold text-yellow-400">
+                  ★ Lendária
+                </p>
+              </div>
+
+              <div className="h-10 w-px bg-white/10" />
+
+              <div>
+                <p className="text-xs uppercase tracking-[.25em] text-zinc-500">
+                  Coleção
+                </p>
+
+                <p className="mt-1 font-medium text-white">
+                  Forjas Esquecidas
+                </p>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <p className="mb-3 text-xs uppercase tracking-[.25em] text-zinc-500">
+                Tema
+              </p>
+
+              <div className="flex flex-wrap gap-2">
+
+                {[
+                  "Industrial",
+                  "Steampunk",
+                  "Mecânico",
+                  "Retrô-futurista",
+                ].map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-red-500/20 bg-red-500/10 px-3 py-1 text-xs text-red-200"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Stats */}
+
+            <div className="space-y-4">
+
+              {[
+                ["Poder", 92],
+                ["Precisão", 84],
+                ["Alcance", 90],
+                ["Controle", 71],
+              ].map(([label, value]) => (
+                <div key={label}>
+                  <div className="mb-2 flex justify-between text-xs uppercase tracking-widest text-zinc-400">
+                    <span>{label}</span>
+                    <span>{value}%</span>
+                  </div>
+
+                  <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400"
+                      style={{ width: `${value}%` }}
+                    />
+
+                  </div>
+                </div>
+              ))}
+
+            </div>
+
+          </div>
+
         </div>
       </section>
     </main>
