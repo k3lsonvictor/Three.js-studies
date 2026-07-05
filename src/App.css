@@ -41,7 +41,7 @@ body {
 .plasma-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: 2;
   pointer-events: none;
 }
 
@@ -85,7 +85,50 @@ body {
 
 .panel {
   position: relative;
-  z-index: 2;
+  z-index: 4;
+}
+
+.chapter-four-panel {
+  z-index: auto;
+  overflow: hidden;
+  /* background: #101010; */
+}
+
+.chapter-four-background {
+  position: absolute;
+  top: 150px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.08) contrast(1.04);
+  transform: scale(1);
+  opacity: 0.4;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.chapter-four-background-tint {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  /* background:
+    radial-gradient(circle at 50% 22%, rgba(66, 34, 24, 0.22), transparent 38%),
+    linear-gradient(180deg, rgba(16, 16, 16, 0.28), rgba(16, 16, 16, 0.12)); */
+  pointer-events: none;
+}
+
+.chapter-four-panel .chapter-four-transition-blur {
+  top: 0;
+  will-change: transform, opacity;
+  z-index: 1;
+}
+
+.chapter-four-panel > :not(.chapter-four-background, .chapter-four-background-tint, .chapter-four-transition-blur) {
+  position: relative;
+  z-index: 5;
 }
 
 .hero-panel {

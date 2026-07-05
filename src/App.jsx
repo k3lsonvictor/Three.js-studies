@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Crosshair from "./components/Crosshair";
+import GradualBlur from "./components/GradualBlur";
 import Plasma from "./components/Plasma";
 import Scene from "./components/Scene";
 import TrueFocus from "./components/TrueFocus";
@@ -206,9 +207,28 @@ function App() {
       </section>
 
       <section
-        className="panel relative flex min-h-screen items-center justify-evenly"
+        className="panel chapter-four-panel relative flex min-h-screen items-center justify-evenly"
         id="chapter-4"
       >
+        <img
+          className="chapter-four-background"
+          src="/background-batle.jpg"
+          alt=""
+          aria-hidden="true"
+        />
+        <div className="chapter-four-background-tint" aria-hidden="true" />
+        <GradualBlur
+          className="chapter-four-transition-blur"
+          position="top"
+          height="16rem"
+          strength={4}
+          divCount={12}
+          curve="bezier"
+          exponential
+          opacity={1}
+          target="parent"
+          zIndex={0}
+        />
         <p className="w-[50%] border-0 border-red-700">
         </p>
         <div className="section-content">
