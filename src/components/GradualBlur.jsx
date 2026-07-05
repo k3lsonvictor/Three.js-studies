@@ -65,6 +65,7 @@ function mergeConfigs(...configs) {
 function getGradientDirection(position) {
   return (
     {
+      center: "to bottom",
       top: "to top",
       bottom: "to bottom",
       left: "to left",
@@ -209,6 +210,7 @@ function GradualBlur(props) {
   }, [config, isHovered]);
 
   const containerStyle = useMemo(() => {
+    const isCenter = config.position === "center";
     const isVertical = ["top", "bottom"].includes(config.position);
     const isHorizontal = ["left", "right"].includes(config.position);
     const isPageTarget = config.target === "page";
@@ -222,7 +224,14 @@ function GradualBlur(props) {
       ...config.style,
     };
 
-    if (isVertical) {
+    if (isCenter) {
+      baseStyle.top = "0%";
+      baseStyle.left = 0;
+      baseStyle.right = 0;
+      baseStyle.width = responsiveWidth || "100%";
+      baseStyle.height = responsiveHeight;
+      baseStyle.transform = "translateY(-50%)";
+    } else if (isVertical) {
       baseStyle.height = responsiveHeight;
       baseStyle.width = responsiveWidth || "100%";
       baseStyle[config.position] = 0;

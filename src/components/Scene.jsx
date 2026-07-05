@@ -78,11 +78,12 @@ function AnimatedCamera() {
   );
 }
 
-function Scene({ onModelReady, performanceProfile = "full" }) {
+function Scene({ onModelReady, performanceProfile = "full", chapter3Ref }) {
   const [modelReady, setModelReady] = useState(false);
   const [effectsReady, setEffectsReady] = useState(false);
   const isLite = performanceProfile === "lite";
   const dpr = isLite ? [1, 1.15] : [1, 2];
+  const stageRef = useRef(null);
 
   const handleModelReady = useCallback(() => {
     setModelReady(true);
@@ -109,8 +110,32 @@ function Scene({ onModelReady, performanceProfile = "full" }) {
     };
   }, [isLite, modelReady]);
 
+  useLayoutEffect(() => {
+    const stage = stageRef.current;
+    const triggerElement = chapter3Ref?.current;
+
+    if (!stage || !triggerElement) {
+      return undefined;
+    }
+
+    const context = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: triggerElement,
+        start: "top center",
+        end: "center top",
+        // markers: true,
+        onEnter: () => stage.classList.add("is-hidden"),
+        onEnterBack: () => stage.classList.add("is-hidden"),
+        onLeaveBack: () => stage.classList.remove("is-hidden"),
+        onLeave: () => stage.classList.remove("is-hidden"),
+      });
+    }, stage);
+
+    return () => context.revert();
+  }, [chapter3Ref]);
+
   return (
-    <div className="model-stage" aria-hidden="true">
+    <div className="model-stage" aria-hidden="true" ref={stageRef}>
       <Canvas dpr={dpr} performance={{ min: 0.45 }}>
         <AnimatedCamera />
         {!isLite ? (

@@ -5,6 +5,9 @@ import Plasma from "./components/Plasma";
 import Scene from "./components/Scene";
 import TrueFocus from "./components/TrueFocus";
 import "./App.css";
+import { Cog } from "lucide-react";
+import { Shield } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 const chapters = [
   "Apresentacao",
@@ -115,8 +118,79 @@ function ChapterProgress() {
   );
 }
 
+export function WeaponInfoCard() {
+  return (
+    <div className="w-fit rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-5">
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-500/15 border border-amber-400/20">
+            <Sparkles className="h-5 w-5 text-amber-400" />
+          </div>
+
+          <div>
+            <p className="text-xs uppercase tracking-[0.25em] text-zinc-400">
+              Raridade
+            </p>
+            <p className="text-lg font-bold text-amber-300">
+              Lendária
+            </p>
+          </div>
+        </div>
+
+        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-red-500/15 border border-red-400/20">
+            <Shield className="h-5 w-5 text-red-400" />
+          </div>
+
+          <div>
+            <p className="text-xs uppercase tracking-[0.25em] text-zinc-400">
+              Coleção
+            </p>
+            <p className="text-base font-semibold text-white">
+              Forjas Esquecidas
+            </p>
+          </div>
+        </div>
+
+        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+        <div className="flex items-start gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-500/15 border border-cyan-400/20">
+            <Cog className="h-5 w-5 text-cyan-400" />
+          </div>
+
+          <div>
+            <p className="text-xs uppercase tracking-[0.25em] text-zinc-400">
+              Tema
+            </p>
+
+            <div className="mt-2 flex flex-wrap gap-2">
+              {[
+                "Industrial",
+                "Steampunk",
+                "Mecânico",
+                "Retrô-futurista",
+              ].map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-zinc-200 backdrop-blur"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const scrollScenesRef = useRef(null);
+  const chapter3Ref = useRef(null);
   const [modelReady, setModelReady] = useState(false);
   const performanceProfile = usePerformanceProfile();
   const isLite = performanceProfile === "lite";
@@ -144,6 +218,7 @@ function App() {
       <Scene
         onModelReady={handleModelReady}
         performanceProfile={performanceProfile}
+        chapter3Ref={chapter3Ref}
       />
       {!isLite ? (
         <Crosshair
@@ -183,7 +258,7 @@ function App() {
         <p className="w-[50%] border-0 border-red-700"></p>
         <div className="section-content">
           <span className="eyebrow">Capítulo 01</span>
-          <p className="panel-copy text-[##eae7e2] pr-28 text-xl !font-thin">
+          <p className="panel-copy text-white pr-28 text-xl !font-thin">
             Um rifle conceitual de oficina, construido em camadas de metal
             escurecido, cobre gasto e pecas aparentes que sugerem montagem
             manual.
@@ -192,18 +267,37 @@ function App() {
       </section>
 
       <section
-        className="panel relative flex min-h-screen items-center justify-evenly"
+        className="panel relative flex min-h-screen items-start justify-evenly"
         id="chapter-3"
+        ref={chapter3Ref}
       >
         <div className="section-content !items-start">
           <span className="eyebrow">Capítulo 02</span>
-          <p className="panel-copy text-[##eae7e2] order-1 w-[50%] text-center pr-28 text-xl !font-thin">
+          <p className="panel-copy text-white !w-[40%] text-center pr-28 text-xl !font-semibold">
             A silhueta alongada destaca o cano, a coronha e o corpo mecanico,
             enquanto os detalhes vermelhos dao ao modelo uma identidade
             industrial mais agressiva.
           </p>
+          <p className="panel-copy text-white !w-[40%] text-center pr-28 text-xl !font-thin">
+            Forjada onde aço e maquinaria se encontram, Engrenagem Rubra é um acabamento que transforma uma arma comum em uma verdadeira relíquia de guerra industrial. Seu corpo exibe metal escurecido e desgastado, marcado por anos de combate, enquanto detalhes em cobre oxidado e anéis de energia vermelha percorrem toda a estrutura, sugerindo um mecanismo alimentado por uma tecnologia esquecida.
+          </p>
+          <p className="panel-copy text-white !w-[40%] text-center pr-28 text-xl !font-thin mb-10">
+            O enorme tambor lateral de engrenagens expostas gira em perfeita sincronia a cada disparo, liberando faíscas e um brilho rubro entre os dentes metálicos. O cano reforçado apresenta gravações mecânicas e placas rebitadas, combinando um visual brutalista com elementos steampunk. A luneta integrada completa o conjunto, oferecendo uma aparência tática sem perder a identidade industrial da arma.          </p>
+
+          <WeaponInfoCard />
+          {/* <div>
+            <p>Raridade: Lendária</p>
+            <p>Coleção: Forjas Esquecidas</p>
+            <p>Tema: Industrial • Steampunk • Mecânico • Retrô-futurista</p>
+          </div> */}
+
         </div>
-        <p className="w-[50%] order-2"></p>
+        {/* <p className="w-[50%] order-2"></p> */}
+        <div className="absolute flex w-[100%] justify-start !items-start
+          top-[50%] left-[50%] -translate-x-[10%] -translate-y-[80%] z-10
+        ">
+          <img className="w-[50%] order-2" src="/section3.png" alt="Rifle Image" />
+        </div>
       </section>
 
       <section
@@ -219,7 +313,7 @@ function App() {
         <div className="chapter-four-background-tint" aria-hidden="true" />
         <GradualBlur
           className="chapter-four-transition-blur"
-          position="top"
+          position="center"
           height="16rem"
           strength={4}
           divCount={12}
@@ -227,14 +321,14 @@ function App() {
           exponential
           opacity={1}
           target="parent"
-          zIndex={0}
+          zIndex={1}
         />
         <p className="w-[50%] border-0 border-red-700">
         </p>
         <div className="section-content">
           <span className="eyebrow">Capítulo 03</span>
 
-          <p className="panel-copy text-[##eae7e2] pr-28 text-lg !font-thin">
+          <p className="panel-copy text-white pr-28 text-lg !font-thin">
             Feito para close-ups em tempo real, o asset combina materiais
             envelhecidos, volumes robustos e leitura clara de perfil em uma cena
             3D interativa.
