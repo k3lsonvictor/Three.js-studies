@@ -183,7 +183,7 @@ function App() {
         <p className="w-[50%] border-0 border-red-700"></p>
         <div className="section-content">
           <span className="eyebrow">Capítulo 01</span>
-          <p className="panel-copy text-white pr-28 text-xl !font-thin">
+          <p className="panel-copy text-[##eae7e2] pr-28 text-xl !font-thin">
             Um rifle conceitual de oficina, construido em camadas de metal
             escurecido, cobre gasto e pecas aparentes que sugerem montagem
             manual.
@@ -197,7 +197,7 @@ function App() {
       >
         <div className="section-content !items-start">
           <span className="eyebrow">Capítulo 02</span>
-          <p className="panel-copy text-white order-1 w-[50%] text-center pr-28 text-xl !font-thin">
+          <p className="panel-copy text-[##eae7e2] order-1 w-[50%] text-center pr-28 text-xl !font-thin">
             A silhueta alongada destaca o cano, a coronha e o corpo mecanico,
             enquanto os detalhes vermelhos dao ao modelo uma identidade
             industrial mais agressiva.
@@ -234,7 +234,7 @@ function App() {
         <div className="section-content">
           <span className="eyebrow">Capítulo 03</span>
 
-          <p className="panel-copy text-white pr-28 text-lg !font-thin">
+          <p className="panel-copy text-[##eae7e2] pr-28 text-lg !font-thin">
             Feito para close-ups em tempo real, o asset combina materiais
             envelhecidos, volumes robustos e leitura clara de perfil em uma cena
             3D interativa.
