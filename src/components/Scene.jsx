@@ -1,5 +1,13 @@
 /* eslint-disable react/no-unknown-property */
-import { Suspense, useLayoutEffect, useRef } from "react";
+/* eslint-disable react/prop-types */
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { Canvas } from "@react-three/fiber";
 import {
   Bounds,
@@ -70,7 +78,35 @@ function AnimatedCamera() {
   );
 }
 
-function Scene() {
+function Scene({ onModelReady }) {
+  const [modelReady, setModelReady] = useState(false);
+  const [effectsReady, setEffectsReady] = useState(false);
+
+  const handleModelReady = useCallback(() => {
+    setModelReady(true);
+    onModelReady?.();
+  }, [onModelReady]);
+
+  useEffect(() => {
+    if (!modelReady) {
+      return undefined;
+    }
+
+    let firstFrame = 0;
+    let secondFrame = 0;
+
+    firstFrame = requestAnimationFrame(() => {
+      secondFrame = requestAnimationFrame(() => {
+        setEffectsReady(true);
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(firstFrame);
+      cancelAnimationFrame(secondFrame);
+    };
+  }, [modelReady]);
+
   return (
     <div className="model-stage" aria-hidden="true">
       <Canvas dpr={[1, 2]}>
@@ -86,21 +122,23 @@ function Scene() {
         <directionalLight position={[-4, -2, 3]} intensity={1.8} color="#ff7050" />
         <Suspense fallback={null}>
           <Bounds fit clip observe margin={1.15}>
-            <Rifle />
+            <Rifle onReady={handleModelReady} />
           </Bounds>
-          <Environment preset="city" />
+          {effectsReady ? <Environment preset="city" /> : null}
         </Suspense>
-        <EffectComposer multisampling={0} disableNormalPass>
-          <Bloom
-            intensity={0.18}
-            luminanceThreshold={0.5}
-            luminanceSmoothing={0.45}
-            mipmapBlur
-            radius={0.28}
-          />
-          <Vignette eskil={false} offset={0.32} darkness={1} />
-          <Noise blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.025} />
-        </EffectComposer>
+        {effectsReady ? (
+          <EffectComposer multisampling={0} disableNormalPass>
+            <Bloom
+              intensity={0.18}
+              luminanceThreshold={0.5}
+              luminanceSmoothing={0.45}
+              mipmapBlur
+              radius={0.28}
+            />
+            <Vignette eskil={false} offset={0.32} darkness={1} />
+            <Noise blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.025} />
+          </EffectComposer>
+        ) : null}
       </Canvas>
     </div>
   );

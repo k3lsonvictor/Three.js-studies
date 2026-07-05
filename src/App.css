@@ -45,6 +45,37 @@ body {
   pointer-events: none;
 }
 
+.model-loader {
+  position: fixed;
+  left: 50%;
+  bottom: clamp(4.5rem, 8vh, 6rem);
+  z-index: 12;
+  min-width: 9.5rem;
+  padding: 0.62rem 0.9rem;
+  border: 1px solid rgba(255, 112, 80, 0.28);
+  border-radius: 999px;
+  background: rgba(12, 12, 12, 0.52);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition:
+    opacity 260ms ease,
+    transform 260ms ease,
+    visibility 260ms ease;
+}
+
+.model-loader.is-hidden {
+  visibility: hidden;
+  opacity: 0;
+  transform: translate(-50%, 0.4rem);
+}
+
 .panel {
   position: relative;
   z-index: 2;

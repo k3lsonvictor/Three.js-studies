@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { Center, useGLTF } from "@react-three/drei";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -8,9 +8,13 @@ gsap.registerPlugin(ScrollTrigger);
 
 const MODEL_PATH = "/Meshy_AI_Crimson_Cogwork_Rifle_0629221108_texture.glb";
 
-function Rifle() {
+function Rifle({ onReady }) {
   const groupRef = useRef(null);
   const { scene } = useGLTF(MODEL_PATH);
+
+  useEffect(() => {
+    onReady?.();
+  }, [onReady]);
 
   useLayoutEffect(() => {
     const group = groupRef.current;

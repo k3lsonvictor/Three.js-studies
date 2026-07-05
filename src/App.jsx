@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Crosshair from "./components/Crosshair";
 import Plasma from "./components/Plasma";
 import Scene from "./components/Scene";
@@ -68,17 +68,15 @@ function ChapterProgress() {
 
 function App() {
   const scrollScenesRef = useRef(null);
+  const [modelReady, setModelReady] = useState(false);
+  const handleModelReady = useCallback(() => {
+    setModelReady(true);
+  }, []);
 
   return (
     <main className="scroll-scenes overflow-x-hidden" ref={scrollScenesRef}>
-      <Suspense
-        fallback={
-          <div className="fixed inset-0 z-50 grid place-items-center bg-black text-white">
-            Loading...
-          </div>
-        }
-      >
-        <div className="plasma-backdrop" aria-hidden="true">
+      {modelReady ? (
+        <div className="plasma-backdrop is-visible" aria-hidden="true">
           <Plasma
             color="#735D7A"
             speed={0.45}
@@ -88,29 +86,36 @@ function App() {
             mouseInteractive={false}
           />
         </div>
-        <Scene />
-        <Crosshair
-          color="#ff705050"
-          containerRef={scrollScenesRef}
-        />
-        <ChapterProgress />
+      ) : null}
+      <Scene onModelReady={handleModelReady} />
+      <Crosshair
+        color="#ff705050"
+        containerRef={scrollScenesRef}
+      />
+      <ChapterProgress />
+      <div
+        className={`model-loader ${modelReady ? "is-hidden" : ""}`}
+        aria-live="polite"
+      >
+        Carregando modelo
+      </div>
 
-        <section
-          className="panel hero-panel relative grid min-h-screen place-items-center"
-          id="chapter-1"
-        >
-          <div className="hero-title top-title hero-focus">
-            <TrueFocus
-              sentence="Concept Rifle"
-              blurAmount={4}
-              borderColor="#ff7050"
-              glowColor="rgba(255, 112, 80, 0.62)"
-              animationDuration={0.65}
-              pauseBetweenAnimations={0.9}
-            />
-          </div>
-          {/* <p className="hero-title bottom-title">Concept Rifle</p> */}
-        </section>
+      <section
+        className="panel hero-panel relative grid min-h-screen place-items-center"
+        id="chapter-1"
+      >
+        <div className="hero-title top-title hero-focus">
+          <TrueFocus
+            sentence="Concept Rifle"
+            blurAmount={4}
+            borderColor="#ff7050"
+            glowColor="rgba(255, 112, 80, 0.62)"
+            animationDuration={0.65}
+            pauseBetweenAnimations={0.9}
+          />
+        </div>
+        {/* <p className="hero-title bottom-title">Concept Rifle</p> */}
+      </section>
 
         <section
           className="panel relative flex min-h-screen items-start justify-evenly"
@@ -158,7 +163,6 @@ function App() {
             </p>
           </div>
         </section>
-      </Suspense>
     </main>
   );
 }
