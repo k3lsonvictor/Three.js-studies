@@ -121,13 +121,16 @@ function Scene({ onModelReady, performanceProfile = "full", chapter3Ref }) {
     const context = gsap.context(() => {
       ScrollTrigger.create({
         trigger: triggerElement,
-        start: "top center",
-        end: "center top",
+        start: "top top",
+        end: "bottom top",
         // markers: true,
         onEnter: () => stage.classList.add("is-hidden"),
         onEnterBack: () => stage.classList.add("is-hidden"),
         onLeaveBack: () => stage.classList.remove("is-hidden"),
-        onLeave: () => stage.classList.remove("is-hidden"),
+      });
+
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
       });
     }, stage);
 
