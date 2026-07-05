@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unknown-property */
+/* eslint-disable react/prop-types */
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { Center, useGLTF } from "@react-three/drei";
 import gsap from "gsap";
