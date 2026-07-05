@@ -81,7 +81,6 @@ function Scene() {
           enableZoom={false}
           rotateSpeed={0.1}
         />
-        <color attach="background" args={["#151515"]} />
         <ambientLight intensity={1.8} />
         <directionalLight position={[4, 5, 5]} intensity={3.5} />
         <directionalLight position={[-4, -2, 3]} intensity={1.8} color="#ff7050" />

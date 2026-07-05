@@ -1,5 +1,6 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import Crosshair from "./components/Crosshair";
+import Plasma from "./components/Plasma";
 import Scene from "./components/Scene";
 import TrueFocus from "./components/TrueFocus";
 import "./App.css";
@@ -77,6 +78,16 @@ function App() {
           </div>
         }
       >
+        <div className="plasma-backdrop" aria-hidden="true">
+          <Plasma
+            color="#735D7A"
+            speed={0.45}
+            direction="pingpong"
+            scale={1}
+            opacity={0.28}
+            mouseInteractive={false}
+          />
+        </div>
         <Scene />
         <Crosshair
           color="#ff705050"
@@ -102,7 +113,7 @@ function App() {
         </section>
 
         <section
-          className="panel relative flex min-h-screen items-center justify-evenly"
+          className="panel relative flex min-h-screen items-start justify-evenly"
           id="chapter-2"
         >
           <p className="w-[50%] border-0 border-red-700"></p>
@@ -117,7 +128,7 @@ function App() {
         </section>
 
         <section
-          className="panel relative flex min-h-screen items-center justify-evenly"
+          className="panel relative flex min-h-screen items-start justify-evenly"
           id="chapter-3"
         >
           <div className="section-content !items-start">
@@ -132,7 +143,7 @@ function App() {
         </section>
 
         <section
-          className="panel relative flex min-h-screen items-center justify-evenly"
+          className="panel relative flex min-h-screen items-start justify-evenly"
           id="chapter-4"
         >
           <p className="w-[50%] border-0 border-red-700">
