@@ -78,9 +78,11 @@ function AnimatedCamera() {
   );
 }
 
-function Scene({ onModelReady }) {
+function Scene({ onModelReady, performanceProfile = "full" }) {
   const [modelReady, setModelReady] = useState(false);
   const [effectsReady, setEffectsReady] = useState(false);
+  const isLite = performanceProfile === "lite";
+  const dpr = isLite ? [1, 1.15] : [1, 2];
 
   const handleModelReady = useCallback(() => {
     setModelReady(true);
@@ -88,7 +90,7 @@ function Scene({ onModelReady }) {
   }, [onModelReady]);
 
   useEffect(() => {
-    if (!modelReady) {
+    if (!modelReady || isLite) {
       return undefined;
     }
 
@@ -105,28 +107,36 @@ function Scene({ onModelReady }) {
       cancelAnimationFrame(firstFrame);
       cancelAnimationFrame(secondFrame);
     };
-  }, [modelReady]);
+  }, [isLite, modelReady]);
 
   return (
     <div className="model-stage" aria-hidden="true">
-      <Canvas dpr={[1, 2]}>
+      <Canvas dpr={dpr} performance={{ min: 0.45 }}>
         <AnimatedCamera />
-        <OrbitControls
-          enableDamping
-          enablePan={false}
-          enableZoom={false}
-          rotateSpeed={0.1}
-        />
+        {!isLite ? (
+          <OrbitControls
+            enableDamping
+            enablePan={false}
+            enableZoom={false}
+            rotateSpeed={0.1}
+          />
+        ) : null}
         <ambientLight intensity={1.8} />
         <directionalLight position={[4, 5, 5]} intensity={3.5} />
-        <directionalLight position={[-4, -2, 3]} intensity={1.8} color="#ff7050" />
+        {!isLite ? (
+          <directionalLight
+            position={[-4, -2, 3]}
+            intensity={1.8}
+            color="#ff7050"
+          />
+        ) : null}
         <Suspense fallback={null}>
           <Bounds fit clip observe margin={1.15}>
             <Rifle onReady={handleModelReady} />
           </Bounds>
-          {effectsReady ? <Environment preset="city" /> : null}
+          {!isLite && effectsReady ? <Environment preset="city" /> : null}
         </Suspense>
-        {effectsReady ? (
+        {!isLite && effectsReady ? (
           <EffectComposer multisampling={0} disableNormalPass>
             <Bloom
               intensity={0.18}

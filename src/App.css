@@ -31,6 +31,13 @@ body {
     linear-gradient(180deg, #151515 0%, #211a17 48%, #101416 100%);
 }
 
+.scroll-scenes.performance-lite {
+  background:
+    radial-gradient(circle at 22% 18%, rgba(255, 112, 80, 0.12), transparent 34%),
+    radial-gradient(circle at 78% 64%, rgba(115, 93, 122, 0.12), transparent 30%),
+    linear-gradient(180deg, #151515 0%, #201b19 52%, #101416 100%);
+}
+
 .plasma-backdrop {
   position: fixed;
   inset: 0;
@@ -127,6 +134,12 @@ body {
 .hero-focus .corner {
   width: clamp(0.72rem, 1.5vw, 1rem);
   height: clamp(0.72rem, 1.5vw, 1rem);
+}
+
+.performance-lite .hero-title,
+.performance-lite .panel-copy,
+.performance-lite .chapter-dot-label {
+  text-shadow: 0 8px 22px rgba(0, 0, 0, 0.48);
 }
 
 .panel-copy {
@@ -246,6 +259,16 @@ body {
   width: 5.25rem;
   text-align: left;
   text-shadow: 0 10px 24px rgba(0, 0, 0, 0.72);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto;
+  }
+
+  .model-loader {
+    transition: none;
+  }
 }
 
 @media (max-width: 768px) {

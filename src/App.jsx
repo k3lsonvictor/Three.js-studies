@@ -12,6 +12,54 @@ const chapters = [
   "Detalhes",
 ];
 
+function getPerformanceProfile() {
+  if (typeof window === "undefined") {
+    return "full";
+  }
+
+  const isNarrowScreen = window.matchMedia("(max-width: 1024px)").matches;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const lowCoreCount =
+    typeof navigator.hardwareConcurrency === "number" &&
+    navigator.hardwareConcurrency <= 4;
+  const lowMemory =
+    typeof navigator.deviceMemory === "number" && navigator.deviceMemory <= 4;
+
+  return isNarrowScreen || prefersReducedMotion || lowCoreCount || lowMemory
+    ? "lite"
+    : "full";
+}
+
+function usePerformanceProfile() {
+  const [profile, setProfile] = useState(getPerformanceProfile);
+
+  useEffect(() => {
+    const mediaQueries = [
+      window.matchMedia("(max-width: 1024px)"),
+      window.matchMedia("(prefers-reduced-motion: reduce)"),
+    ];
+    const updateProfile = () => {
+      setProfile(getPerformanceProfile());
+    };
+
+    mediaQueries.forEach((query) => {
+      query.addEventListener("change", updateProfile);
+    });
+
+    updateProfile();
+
+    return () => {
+      mediaQueries.forEach((query) => {
+        query.removeEventListener("change", updateProfile);
+      });
+    };
+  }, []);
+
+  return profile;
+}
+
 function ChapterProgress() {
   const [activeChapter, setActiveChapter] = useState(0);
 
@@ -69,13 +117,18 @@ function ChapterProgress() {
 function App() {
   const scrollScenesRef = useRef(null);
   const [modelReady, setModelReady] = useState(false);
+  const performanceProfile = usePerformanceProfile();
+  const isLite = performanceProfile === "lite";
   const handleModelReady = useCallback(() => {
     setModelReady(true);
   }, []);
 
   return (
-    <main className="scroll-scenes overflow-x-hidden" ref={scrollScenesRef}>
-      {modelReady ? (
+    <main
+      className={`scroll-scenes overflow-x-hidden performance-${performanceProfile}`}
+      ref={scrollScenesRef}
+    >
+      {modelReady && !isLite ? (
         <div className="plasma-backdrop is-visible" aria-hidden="true">
           <Plasma
             color="#735D7A"
@@ -87,11 +140,16 @@ function App() {
           />
         </div>
       ) : null}
-      <Scene onModelReady={handleModelReady} />
-      <Crosshair
-        color="#ff705050"
-        containerRef={scrollScenesRef}
+      <Scene
+        onModelReady={handleModelReady}
+        performanceProfile={performanceProfile}
       />
+      {!isLite ? (
+        <Crosshair
+          color="#ff705050"
+          containerRef={scrollScenesRef}
+        />
+      ) : null}
       <ChapterProgress />
       <div
         className={`model-loader ${modelReady ? "is-hidden" : ""}`}
@@ -107,11 +165,11 @@ function App() {
         <div className="hero-title top-title hero-focus">
           <TrueFocus
             sentence="Concept Rifle"
-            blurAmount={4}
+            blurAmount={isLite ? 2 : 4}
             borderColor="#ff7050"
             glowColor="rgba(255, 112, 80, 0.62)"
-            animationDuration={0.65}
-            pauseBetweenAnimations={0.9}
+            animationDuration={isLite ? 0.85 : 0.65}
+            pauseBetweenAnimations={isLite ? 1.4 : 0.9}
           />
         </div>
         {/* <p className="hero-title bottom-title">Concept Rifle</p> */}
