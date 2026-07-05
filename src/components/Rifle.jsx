@@ -52,7 +52,7 @@ function Rifle({ onReady }) {
         .to(group.position, { x: -0.35, y: 0.18, z: 0.25, ease: "none" })
         .to(
           group.rotation,
-          { x: 0.22, y: Math.PI * 3.25, z: -0.1, ease: "none" },
+          { x: 0.22, y: Math.PI * 2.9, z: -0.1, ease: "none" },
           "<",
         );
     });

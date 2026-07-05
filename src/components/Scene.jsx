@@ -72,7 +72,7 @@ function AnimatedCamera() {
     <PerspectiveCamera
       ref={cameraRef}
       makeDefault
-      position={[0, 0.25, 5.3]}
+      position={[-1.6, -1.35, 5.3]}
       fov={38}
     />
   );
