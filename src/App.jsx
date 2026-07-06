@@ -258,6 +258,9 @@ function App() {
         <p className="w-[50%] border-0 border-red-700"></p>
         <div className="section-content">
           {/* <span className="eyebrow">Capítulo 01</span> */}
+          <span className="absolute top-[450px] right-[750px] text-[220px] font-black leading-none text-white/[0.03]">
+            01
+          </span>
           <span className="eyebrow mb-3 !text-sm uppercase tracking-[.45em] text-red-500">
             Capítulo 01
           </span>
@@ -280,13 +283,14 @@ function App() {
         ref={chapter3Ref}
       >
         <div className="section-content !items-start">
+          <span className="absolute -top-28 lefft-0 text-[220px] font-black leading-none text-white/[0.03]">
+            02
+          </span>
           <span className="mb-3 text-sm uppercase tracking-[.45em] text-red-500">
             Capítulo 02
           </span>
           <h2 className="mb-5 text-6xl font-black uppercase tracking-wide text-white">
-            Engrenagem
-            <br />
-            Rubra
+            Acabamento
           </h2>
           <p className="panel-copy text-white !w-[40%] text-center pr-28 text-xl !font-semibold">
             A silhueta alongada destaca o cano, a coronha e o corpo mecanico,
@@ -366,9 +370,7 @@ function App() {
           </span>
 
           <h2 className="mb-5 text-6xl font-black uppercase tracking-wide text-white">
-            Engrenagem
-            <br />
-            Rubra
+            Detalhes
           </h2>
 
           <p className="mb-10 text-lg font-light leading-8 text-zinc-300">
