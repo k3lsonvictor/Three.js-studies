@@ -254,6 +254,7 @@ function App() {
       <section
         className="panel relative flex min-h-screen items-center justify-evenly"
         id="chapter-2"
+        ref={chapter3Ref}
       >
         <p className="w-[50%] border-0 border-red-700"></p>
         <div className="section-content">
@@ -277,7 +278,6 @@ function App() {
       <section
         className="panel relative flex min-h-screen items-start justify-evenly"
         id="chapter-3"
-        ref={chapter3Ref}
       >
         <div className="section-content !items-start">
           <span className="mb-3 text-sm uppercase tracking-[.45em] text-red-500">

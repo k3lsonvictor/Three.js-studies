@@ -123,7 +123,7 @@ function Scene({ onModelReady, performanceProfile = "full", chapter3Ref }) {
         trigger: triggerElement,
         start: "top top",
         end: "bottom top",
-        // markers: true,
+        markers: true,
         onEnter: () => stage.classList.add("is-hidden"),
         onEnterBack: () => stage.classList.add("is-hidden"),
         onLeaveBack: () => stage.classList.remove("is-hidden"),
